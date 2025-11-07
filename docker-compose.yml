@@ -5,22 +5,35 @@ services:
     image: postgres:15
     environment:
       POSTGRES_DB: taskoria_db
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: super-star-101
+      POSTGRES_USER: docker-admin
+      POSTGRES_PASSWORD: docker-password
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U docker-admin"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      DB_NAME: taskoria_db
+      DB_USER: docker-admin
+      DB_PASSWORD: docker-password
+      DB_HOST: db
+      DB_PORT: 5432
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      # - db
+      db:
+        condition: service_healthy
 
 volumes:
   postgres_data:
