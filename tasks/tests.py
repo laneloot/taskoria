@@ -1,3 +1,9 @@
 from django.test import TestCase
 
-# Create your tests here.
+from tasks.models import Task
+
+
+class TaskTestCase(TestCase):
+    def test_task_creation(self):
+        task = Task.objects.create(title="Test Task")
+        self.assertEqual(task.title, "Test Task")
