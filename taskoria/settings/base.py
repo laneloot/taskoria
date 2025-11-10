@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     # Taskoria apps
     "users",
     "projects",
-    "tasks",
+    "tasks.apps.TasksConfig",
     "notifications",
     "common",
 ]

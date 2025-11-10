@@ -60,6 +60,8 @@ jobs:
           python manage.py test
 
       - name: Run Tests with Coverage
+        env:
+          DJANGO_SETTINGS_MODULE: taskoria.settings.development
         run: |
           coverage run -m pytest
           coverage report
