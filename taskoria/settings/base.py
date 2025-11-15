@@ -20,9 +20,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
     # Third-party apps
     "rest_framework",
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist', 
     "corsheaders",
+
     # Taskoria apps
     "users",
     "projects",
@@ -111,7 +115,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 # CORS
 CORS_ALLOW_ALL_ORIGINS = True  # Dev only, restrict in production
 
-DJANGO_REST_FRAMEWORK = {
+REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),

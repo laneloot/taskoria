@@ -1,11 +1,14 @@
 from rest_framework.permissions import BasePermission
 
 class IsAdmin(BasePermission):
+    print('----------- Checking IsAdmin Permission -----------')
     """
     Allows access only to admin users.
     """
 
     def has_permission(self, request, view):
+        print('----------- Inside has_permission of IsAdmin -----------')
+        print( request.user)
         return request.user and request.user.is_authenticated and request.user.role == 'admin'
     
 class IsManager(BasePermission):
