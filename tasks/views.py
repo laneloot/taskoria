@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from rest_framework import generics
+from .models import Task
+from .serializers import TaskSerializer
+from .permissions import IsAssigneeOrManager
 
-# Create your views here.
-
-
-# Create your views here.
-def home(request):
-    pass
+class TaskUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [IsAssigneeOrManager]

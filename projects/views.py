@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from rest_framework import generics
+from .models import Project
+from .serializers import ProjectSerializer
+from .permissions import IsAdminOrManager
 
-# Create your views here.
-
-
-# Create your views here.
-def home(request):
-    pass
+class ProjectCreateView(generics.CreateAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAdminOrManager]
