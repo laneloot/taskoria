@@ -1,5 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+
+from django.utils.encoding import smart_str, force_bytes, smart_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -61,8 +65,44 @@ class ChangePasswordSerializer(serializers.Serializer):
     new_password2 = serializers.CharField(required=True)
 
     def validate(self, attrs):
+        print(attrs)
         if attrs["new_password"] != attrs["new_password2"]:
             raise serializers.ValidationError(
                 {"new_password": "New password fields didn't match."}
             )
         return attrs
+
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate(self, attrs):
+        email = attrs['email']
+        if not User.objects.filter(email=email).exists():
+            raise serializers.ValidationError("User with this email does not exist.")
+        return attrs
+
+class SetNewPasswordSerializer(serializers.Serializer):
+    uidb64 = serializers.CharField()
+    token = serializers.CharField()
+    new_password = serializers.CharField()
+
+    def validate(self, attrs):
+        try:
+            uid = smart_str(urlsafe_base64_decode(attrs['uidb64']))
+            user = User.objects.get(pk=uid)
+        except:
+            raise serializers.ValidationError("Invalid UID")
+
+        if not PasswordResetTokenGenerator().check_token(user, attrs['token']):
+            raise serializers.ValidationError("Invalid or expired token")
+
+        validate_password(attrs["new_password"])
+        attrs["user"] = user
+        return attrs
+
+    def save(self):
+        user = self.validated_data["user"]
+        user.set_password(self.validated_data["new_password"])
+        user.save()
+        return user
