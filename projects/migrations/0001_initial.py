@@ -10,13 +10,12 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("projects", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name="Task",
+            name="Project",
             fields=[
                 (
                     "id",
@@ -27,52 +26,37 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("title", models.CharField(max_length=255)),
+                ("name", models.CharField(max_length=255)),
                 ("description", models.TextField(blank=True)),
-                (
-                    "priority",
-                    models.CharField(
-                        choices=[
-                            ("low", "Low"),
-                            ("medium", "Medium"),
-                            ("high", "High"),
-                        ],
-                        default="medium",
-                        max_length=10,
-                    ),
-                ),
+                ("start_date", models.DateField()),
+                ("end_date", models.DateField(blank=True, null=True)),
                 (
                     "status",
                     models.CharField(
                         choices=[
-                            ("todo", "To Do"),
-                            ("in_progress", "In Progress"),
-                            ("done", "Done"),
-                            ("blocked", "Blocked"),
+                            ("planning", "Planning"),
+                            ("active", "Active"),
+                            ("completed", "Completed"),
+                            ("archived", "Archived"),
                         ],
-                        default="todo",
+                        default="planning",
                         max_length=20,
                     ),
                 ),
-                ("due_date", models.DateField(blank=True, null=True)),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 (
-                    "assignee",
-                    models.ForeignKey(
-                        blank=True,
-                        null=True,
-                        on_delete=django.db.models.deletion.SET_NULL,
-                        related_name="tasks",
-                        to=settings.AUTH_USER_MODEL,
+                    "members",
+                    models.ManyToManyField(
+                        blank=True, related_name="projects", to=settings.AUTH_USER_MODEL
                     ),
                 ),
                 (
-                    "project",
+                    "owner",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
-                        related_name="tasks",
-                        to="projects.project",
+                        related_name="owned_projects",
+                        to=settings.AUTH_USER_MODEL,
                     ),
                 ),
             ],

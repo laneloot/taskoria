@@ -22,7 +22,7 @@ class Task(models.Model):
     project = models.ForeignKey(
         Project,
         on_delete=models.CASCADE,
-        related_name='tasks'
+        related_name='tasks',
     )
     assignee = models.ForeignKey(
         User,
