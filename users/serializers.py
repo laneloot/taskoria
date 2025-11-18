@@ -8,6 +8,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+from .utils import email_verification_token
+
 User = get_user_model()
 
 
@@ -27,6 +29,14 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         #     'bio': {'required': False},
         # }
 
+    def perform_create(self, serializer):
+        user = serializer.save()
+        uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+        token = email_verification_token.make_token(user)
+
+        verify_url = f"http://localhost:3000/verify-email/{uidb64}/{token}/"
+        print("Email verification link:", verify_url)
+
     def validate(self, attrs):
         if attrs["password"] != attrs["password2"]:
             raise serializers.ValidationError(
@@ -38,7 +48,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         validated_data.pop("password2")
         user = User.objects.create_user(**validated_data)
         return user
-
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -71,7 +80,6 @@ class ChangePasswordSerializer(serializers.Serializer):
                 {"new_password": "New password fields didn't match."}
             )
         return attrs
-
 
 class PasswordResetRequestSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -106,3 +114,7 @@ class SetNewPasswordSerializer(serializers.Serializer):
         user.set_password(self.validated_data["new_password"])
         user.save()
         return user
+
+class EmailVerificationSerializer(serializers.Serializer):
+    uidb64 = serializers.CharField()
+    token = serializers.CharField()

@@ -10,8 +10,16 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
 from rest_framework import status
 
-from .serializers import CustomTokenObtainPairSerializer, UserRegistrationSerializer, ChangePasswordSerializer, PasswordResetRequestSerializer, SetNewPasswordSerializer
+from .serializers import (
+    CustomTokenObtainPairSerializer, 
+    UserRegistrationSerializer, 
+    ChangePasswordSerializer, 
+    PasswordResetRequestSerializer, 
+    SetNewPasswordSerializer, 
+    EmailVerificationSerializer
+)
 from .permissions import IsAdmin, IsManager, IsMember, IsAdminOrManager
+from .utils import email_verification_token
 
 User = get_user_model()
 
@@ -92,3 +100,27 @@ class PasswordResetConfirmView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"detail": "Password has been reset"}, status=status.HTTP_200_OK)
+
+class VerifyEmailView(generics.GenericAPIView):
+    serializer_class = EmailVerificationSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        uidb64 = serializer.validated_data['uidb64']
+        token = serializer.validated_data['token']
+
+        try:
+            uid = smart_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except:
+            return Response({"detail": "Invalid link"}, status=400)
+
+        if not email_verification_token.check_token(user, token):
+            return Response({"detail": "Invalid or expired token"}, status=400)
+
+        user.email_verified = True
+        user.save()
+
+        return Response({"detail": "Email verified successfully"}, status=200)
