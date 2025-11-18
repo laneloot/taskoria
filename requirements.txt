@@ -33,5 +33,6 @@ pytest-django==4.11.1
 python-decouple==3.8
 pytokens==0.3.0
 PyYAML==6.0.3
+six==1.17.0
 sqlparse==0.5.3
 virtualenv==20.35.4
