@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
+
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -53,3 +54,15 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data["email"] = self.user.email
         data["role"] = self.user.role
         return data
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True, validators=[validate_password])
+    new_password2 = serializers.CharField(required=True)
+
+    def validate(self, attrs):
+        if attrs["new_password"] != attrs["new_password2"]:
+            raise serializers.ValidationError(
+                {"new_password": "New password fields didn't match."}
+            )
+        return attrs
