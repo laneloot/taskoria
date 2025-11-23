@@ -59,3 +59,11 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
+    
+    @property
+    def is_overdue(self):
+        from django.utils import timezone
+        if self.due_date and self.status != 'done':
+            return self.due_date < timezone.now().date()
+        return False
+

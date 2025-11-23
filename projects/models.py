@@ -34,3 +34,12 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+    
+    @property
+    def progress_percentage(self):
+        total = self.tasks.count()
+        if total == 0:
+            return 0
+        done = self.tasks.filter(status="done").count()
+        return int(done * 100 / total)
+

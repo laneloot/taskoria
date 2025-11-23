@@ -10,7 +10,10 @@ class ProjectSerializer(serializers.ModelSerializer):
     )
     tasks_count = serializers.IntegerField(source='tasks.count', read_only=True)
     completed_tasks_count = serializers.SerializerMethodField()
-    progress = serializers.SerializerMethodField()
+    progress = serializers.IntegerField(source='progress_percentage', read_only=True)
+
+    ordering_fields = ['priority', 'due_date', 'started_at', 'completed_at', 'created_at']
+    search_fields = ['title', 'description', 'assignee__username']
 
     class Meta:
         model = Project
