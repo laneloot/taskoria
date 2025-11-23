@@ -15,6 +15,12 @@ class TaskSerializer(serializers.ModelSerializer):
 
     project_name = serializers.CharField(source="project.name", read_only=True)
     assignee_username = serializers.CharField(source="assignee.username", read_only=True)
+    blocked_by = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=Task.objects.all(),
+        required=False
+    )
+
     comments = CommentSerializer(many=True, read_only=True)
     attachments= AttachmentSerializer(many=True, read_only=True)
 
@@ -33,6 +39,9 @@ class TaskSerializer(serializers.ModelSerializer):
             'due_date',
             'created_at',
             'updated_at',
+            'started_at',
+            'completed_at',
+            'blocked_by',
             'comments',
             'attachments',
         ]
