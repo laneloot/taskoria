@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     "notifications",
     "common",
     'comments',
-    "attatchments"
+    "attachments"
 ]
 
 # Middleware

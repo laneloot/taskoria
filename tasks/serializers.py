@@ -3,6 +3,7 @@ from .models import Task
 from projects.models import Project
 from users.models import User
 from comments.serializers import CommentSerializer
+from attachments.serializers import AttachmentSerializer
 
 class TaskSerializer(serializers.ModelSerializer):
     project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
@@ -15,6 +16,7 @@ class TaskSerializer(serializers.ModelSerializer):
     project_name = serializers.CharField(source="project.name", read_only=True)
     assignee_username = serializers.CharField(source="assignee.username", read_only=True)
     comments = CommentSerializer(many=True, read_only=True)
+    attachments= AttachmentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Task
@@ -31,7 +33,8 @@ class TaskSerializer(serializers.ModelSerializer):
             'due_date',
             'created_at',
             'updated_at',
-            "comments"
+            'comments',
+            'attachments',
         ]
 
     def validate(self, data):

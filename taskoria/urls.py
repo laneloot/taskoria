@@ -25,4 +25,6 @@ urlpatterns = [
     path("api/tasks/", include("tasks.urls")),
     path("api/notifications/", include("notifications.urls")),
     path('api/comments/', include('comments.urls')),
+    path('api/attachments/', include('attachments.urls')),
+
 ]
