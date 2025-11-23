@@ -8,3 +8,5 @@ DATABASES["default"].update({"HOST": config("DB_HOST", default="localhost")})
 
 # Static files
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

@@ -18,7 +18,7 @@ from .serializers import (
     SetNewPasswordSerializer, 
     EmailVerificationSerializer
 )
-from .permissions import IsAdmin, IsManager, IsMember, IsAdminOrManager
+from .permissions import IsAdmin
 from .utils import email_verification_token
 
 User = get_user_model()
@@ -29,14 +29,12 @@ class UserRegistrationView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = UserRegistrationSerializer
 
-
 class UserProfileView(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserRegistrationSerializer
 
     def get_object(self):
         return self.request.user
-
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
