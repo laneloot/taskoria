@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "tasks.apps.TasksConfig",
     "notifications",
     "common",
+    'comments',
 ]
 
 # Middleware

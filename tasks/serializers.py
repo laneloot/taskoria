@@ -5,14 +5,13 @@ from users.models import User
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    project = serializers.PrimaryKeyRelatedField(
-        queryset=Project.objects.all()
-    )
+    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
     assignee = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(),
         allow_null=True,
         required=False
     )
+
     project_name = serializers.CharField(source="project.name", read_only=True)
     assignee_username = serializers.CharField(source="assignee.username", read_only=True)
 
@@ -34,12 +33,9 @@ class TaskSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, data):
-        # Ensure assignee is a member of the project
+        # Assignee must be a member of the project
         if data.get("assignee") and data["assignee"] not in data["project"].members.all():
             raise serializers.ValidationError({
-                "assignee": "This user is not a member of the project."
+                "assignee": "User is not a member of the project."
             })
         return data
-
-    def create(self, validated_data):
-        return Task.objects.create(**validated_data)
