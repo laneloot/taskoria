@@ -112,61 +112,52 @@ Taskoria includes:
 
 ---
 
-## 📦 Installation
+# 📦 Installation Guide – Taskoria
 
-### 1. Clone the repo
-```bash
+# 1. Clone the repo
 git clone https://github.com/yourusername/taskoria.git
 cd taskoria
-### 2. Create virtual environment
-```bash
-Copy code
+
+# 2. Create virtual environment
 python3 -m venv venv
 source venv/bin/activate
-3. Install dependencies
-bash
-Copy code
+
+# 3. Install dependencies
 pip install -r requirements.txt
-4. Apply migrations
-bash
-Copy code
+
+# 4. Apply migrations
 python manage.py migrate
-5. Run development server
-bash
-Copy code
+
+# 5. Run development server
 python manage.py runserver
-🐳 Running with Docker (recommended)
-bash
-Copy code
+
+
+
+# 🐳 Running with Docker (recommended)
 docker-compose up --build
-This starts:
+# This starts:
+# - Django (Daphne ASGI)
+# - Celery worker
+# - Celery beat
+# - Redis
+# - PostgreSQL
 
-Django (Daphne ASGI)
 
-Celery worker
 
-Celery beat
+# 🔌 WebSocket Testing
+# Connect to:
+# ws://localhost:8000/ws/notifications/
 
-Redis
+# Example using browser console:
+# let s = new WebSocket("ws://localhost:8000/ws/notifications/");
+# s.onmessage = (e) => console.log("Notification:", e.data);
 
-PostgreSQL
 
-🔌 WebSocket Testing
-Connect to:
 
-bash
-Copy code
-ws://localhost:8000/ws/notifications/
-Using browser console:
-
-javascript
-Copy code
-let s = new WebSocket("ws://localhost:8000/ws/notifications/");
-s.onmessage = (e) => console.log("Notification:", e.data);
-🧪 Running Tests
-bash
-Copy code
+# 🧪 Running Tests
 python manage.py test
+
+
 📁 Project Structure
 bash
 Copy code
