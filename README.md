@@ -118,8 +118,8 @@ Taskoria includes:
 ```bash
 git clone https://github.com/yourusername/taskoria.git
 cd taskoria
-2. Create virtual environment
-bash
+### 2. Create virtual environment
+```bash
 Copy code
 python3 -m venv venv
 source venv/bin/activate
