@@ -112,49 +112,49 @@ Taskoria includes:
 
 ---
 
-# 📦 Installation Guide – Taskoria
+## 📦 Installation Guide – Taskoria
 
-# 1. Clone the repo
+### 1. Clone the repo
 git clone https://github.com/yourusername/taskoria.git
 cd taskoria
 
-# 2. Create virtual environment
+### 2. Create virtual environment
 python3 -m venv venv
 source venv/bin/activate
 
-# 3. Install dependencies
+### 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Apply migrations
+### 4. Apply migrations
 python manage.py migrate
 
-# 5. Run development server
+### 5. Run development server
 python manage.py runserver
 
 
 
-# 🐳 Running with Docker (recommended)
+## 🐳 Running with Docker (recommended)
 docker-compose up --build
-# This starts:
-# - Django (Daphne ASGI)
-# - Celery worker
-# - Celery beat
-# - Redis
-# - PostgreSQL
+### This starts:
+### - Django (Daphne ASGI)
+### - Celery worker
+### - Celery beat
+### - Redis
+### - PostgreSQL
 
 
 
-# 🔌 WebSocket Testing
-# Connect to:
-# ws://localhost:8000/ws/notifications/
+## 🔌 WebSocket Testing
+### Connect to:
+### ws://localhost:8000/ws/notifications/
 
-# Example using browser console:
-# let s = new WebSocket("ws://localhost:8000/ws/notifications/");
-# s.onmessage = (e) => console.log("Notification:", e.data);
+### Example using browser console:
+ let s = new WebSocket("ws://localhost:8000/ws/notifications/");
+ s.onmessage = (e) => console.log("Notification:", e.data);
 
 
 
-# 🧪 Running Tests
+## 🧪 Running Tests
 python manage.py test
 
 
