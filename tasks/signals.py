@@ -1,6 +1,8 @@
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.utils import timezone
+from notifications.services import create_notification
+
 
 from .models import Task
 from notifications.email import (
@@ -30,6 +32,14 @@ def handle_task_notifications(sender, instance, created, **kwargs):
     # New task created with assignee -> send assignment email
     if created and instance.assignee:
         send_task_assigned_email(instance)
+        create_notification(
+            user=instance.assignee,
+            title="New Task Assigned",
+            message=f"You were assigned the task '{instance.title}'.",
+            target_type="task",
+            target_id=instance.id,
+        )
+
         return
 
     # Existing task updated
@@ -43,3 +53,11 @@ def handle_task_notifications(sender, instance, created, **kwargs):
     # Status changed
     if old_status and old_status != instance.status:
         send_task_status_changed_email(instance, old_status, instance.status)
+        create_notification(
+            user=instance.assignee,
+            title="Task Status Updated",
+            message=f"The task '{instance.title}' changed from '{old_status}' to '{instance.status}'.",
+            target_type="task",
+            target_id=instance.id,
+        )
+
