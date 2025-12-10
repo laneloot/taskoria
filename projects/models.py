@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import User
+from django.core.cache import cache
 
 
 class Project(models.Model):
@@ -34,14 +35,23 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     @property
     def progress_percentage(self):
+        key = f"project_progress_{self.id}"
+        cached = cache.get(key)
+        if cached is not None:
+            return cached
+
         total = self.tasks.count()
         if total == 0:
+            cache.set(key, 0, 30)
             return 0
+
         done = self.tasks.filter(status="done").count()
-        return int(done * 100 / total)
+        result = int(done * 100 / total)
+        cache.set(key, result, 30)
+        return result
 
     class Meta:
         indexes = [
