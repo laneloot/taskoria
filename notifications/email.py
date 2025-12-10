@@ -1,5 +1,5 @@
-from django.core.mail import send_mail
 from django.conf import settings
+from .tasks import send_email_task
 
 
 def send_task_assigned_email(task):
@@ -16,13 +16,7 @@ def send_task_assigned_email(task):
         "Please log in to Taskoria to view more details.\n"
     )
 
-    send_mail(
-        subject,
-        message,
-        settings.DEFAULT_FROM_EMAIL,
-        [task.assignee.email],
-        fail_silently=True,
-    )
+    send_email_task.delay(subject, message, task.assignee.email)
 
 
 def send_task_status_changed_email(task, old_status, new_status):
@@ -37,13 +31,7 @@ def send_task_status_changed_email(task, old_status, new_status):
         "Please log in to Taskoria to review the update.\n"
     )
 
-    send_mail(
-        subject,
-        message,
-        settings.DEFAULT_FROM_EMAIL,
-        [task.assignee.email],
-        fail_silently=True,
-    )
+    send_email_task.delay(subject, message, task.assignee.email)
 
 
 def send_task_comment_email(comment):
@@ -61,10 +49,4 @@ def send_task_comment_email(comment):
         "Please log in to Taskoria to reply or see more details.\n"
     )
 
-    send_mail(
-        subject,
-        message,
-        settings.DEFAULT_FROM_EMAIL,
-        [assignee.email],
-        fail_silently=True,
-    )
+    send_email_task.delay(subject, message, assignee.email)

@@ -28,6 +28,15 @@ class UserRegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = UserRegistrationSerializer
+    
+    def perform_create(self, serializer):
+        user = serializer.save()
+
+        uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+        token = email_verification_token.make_token(user)
+
+        verify_url = f"http://localhost:3000/verify-email/{uidb64}/{token}/"
+        print("Email verification link:", verify_url)
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]

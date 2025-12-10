@@ -16,6 +16,10 @@ services:
       interval: 10s
       timeout: 10s
       retries: 10
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
 
   web:
     build: .
@@ -31,9 +35,29 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      # - db
-      db:
-        condition: service_healthy
+      - db
+      # db:
+      #   condition: service_healthy
+      - redis
+
+  celery:
+    build: .
+    command: celery -A taskoria worker -l info
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+
+  celery_beat:
+    build: .
+    command: celery -A taskoria beat -l info
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+
 
 volumes:
   postgres_data:

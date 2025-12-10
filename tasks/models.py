@@ -48,7 +48,6 @@ class Task(models.Model):
     started_at = models.DateTimeField(null=True, blank=True)
     completed_at = models.DateTimeField(null=True, blank=True)
 
-    # Optional: task dependencies (blockers)
     blocked_by = models.ManyToManyField(
         "self",
         symmetrical=False,

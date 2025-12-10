@@ -10,10 +10,10 @@ from .models import Task
 from .serializers import TaskSerializer
 from .permissions import IsAssigneeOrManager
 
-class TaskUpdateView(generics.RetrieveUpdateAPIView):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
-    permission_classes = [IsAssigneeOrManager]
+# class TaskUpdateView(generics.RetrieveUpdateAPIView):
+#     queryset = Task.objects.all()
+#     serializer_class = TaskSerializer
+#     permission_classes = [IsAssigneeOrManager]
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
@@ -38,11 +38,10 @@ class TaskViewSet(viewsets.ModelViewSet):
         # automatically set created_by if needed later
         serializer.save()
 
-    
     def perform_update(self, serializer):
         task = self.get_object()
         old_status = task.status
-        updated_task = serializer.save(commit=False)
+        updated_task = serializer.save()
 
         new_status = updated_task.status
 
@@ -82,5 +81,3 @@ class TaskViewSet(viewsets.ModelViewSet):
         tasks = Task.objects.filter(project_id=project_id)
         serializer = self.get_serializer(tasks, many=True)
         return Response(serializer.data)
-
-
