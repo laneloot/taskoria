@@ -20,11 +20,5 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/users/", include("users.urls")),
-    path("api/projects/", include("projects.urls")),
-    path("api/tasks/", include("tasks.urls")),
-    path("api/notifications/", include("notifications.urls")),
-    path('api/comments/', include('comments.urls')),
-    path('api/attachments/', include('attachments.urls')),
-
+    path('api/v1/', include('taskoria.api.v1.urls')),
 ]
