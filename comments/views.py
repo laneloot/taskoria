@@ -26,7 +26,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         
         return (
             queryset
-            .select_related('author', 'task')
+            .select_related('author', 'task', 'task__project')
             .all()
         )
 

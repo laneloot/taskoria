@@ -11,3 +11,10 @@ class AttachmentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(uploaded_by=self.request.user)
+
+    def get_queryset(self):
+        return (
+            Attachment.objects
+            .select_related("uploaded_by", "task", "task__project")
+            .all()
+        )

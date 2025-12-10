@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import User
 from projects.models import Project
+from .querysets import TaskQuerySet
 
 
 class Task(models.Model):
@@ -55,6 +56,8 @@ class Task(models.Model):
         related_name='blocking'
     )
 
+    objects = TaskQuerySet.as_manager()
+
 
     def __str__(self):
         return self.title
@@ -65,4 +68,13 @@ class Task(models.Model):
         if self.due_date and self.status != 'done':
             return self.due_date < timezone.now().date()
         return False
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=["status"]),
+            models.Index(fields=["priority"]),
+            models.Index(fields=["due_date"]),
+            models.Index(fields=["assignee"]),
+            models.Index(fields=["project"]),
+        ]
 

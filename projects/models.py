@@ -43,3 +43,7 @@ class Project(models.Model):
         done = self.tasks.filter(status="done").count()
         return int(done * 100 / total)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["name"]),
+        ]
