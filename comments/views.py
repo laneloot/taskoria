@@ -23,8 +23,13 @@ class CommentViewSet(viewsets.ModelViewSet):
 
         if task_id:
             queryset = queryset.filter(task_id=task_id)
+        
+        return (
+            queryset
+            .select_related('author', 'task')
+            .all()
+        )
 
-        return queryset
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)

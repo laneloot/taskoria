@@ -47,6 +47,15 @@ class TaskViewSet(viewsets.ModelViewSet):
     ]
     ordering = ['-created_at']
 
+    def get_queryset(self):
+        return (
+            Task.objects
+            .select_related('project', 'assignee')
+            .prefetch_related('attachments', 'comments')
+            .all()
+        )
+
+
     def perform_create(self, serializer):
         # automatically set created_by if needed later
         serializer.save()

@@ -41,7 +41,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
             return Project.objects.all()
 
         # Members: only projects they belong to
-        return Project.objects.filter(members=user)
+        return Project.objects.filter(members=user).prefetch_related('members', 'tasks').all()
 
     def perform_create(self, serializer):
         serializer.save()
