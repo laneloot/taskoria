@@ -18,8 +18,16 @@ class ProjectViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminManagerOrReadOnlyForMembers]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['status', 'owner', 'members']
-    search_fields = ['name', 'description']
-    ordering_fields = ['start_date', 'end_date', 'created_at']
+    search_fields = [
+        'name',
+        'description',
+        'members__username',
+    ]
+
+    ordering_fields = [
+        'created_at',
+        'updated_at',
+    ]
     ordering = ['-created_at']
 
     def get_queryset(self):

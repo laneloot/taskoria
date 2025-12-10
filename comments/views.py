@@ -7,6 +7,15 @@ from .permissions import IsAuthorOrManager
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticated, IsAuthorOrManager]
+    
+    search_fields = [
+        'message',
+        'author__username',
+    ]
+
+    ordering_fields = [
+        'created_at',
+    ]
 
     def get_queryset(self):
         task_id = self.request.query_params.get("task")

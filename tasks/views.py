@@ -30,8 +30,21 @@ class TaskViewSet(viewsets.ModelViewSet):
         'due_date',
     ]
 
-    search_fields = ['title', 'description']
-    ordering_fields = ['priority', 'due_date', 'created_at']
+    search_fields = [
+        'title',
+        'description',
+        'assignee__username',
+        'project__name',
+    ]
+
+    ordering_fields = [
+        'created_at',
+        'updated_at',
+        'priority',
+        'due_date',
+        'started_at',
+        'completed_at',
+    ]
     ordering = ['-created_at']
 
     def perform_create(self, serializer):
