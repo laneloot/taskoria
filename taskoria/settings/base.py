@@ -171,6 +171,13 @@ CELERY_TIMEZONE = TIME_ZONE
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'taskoria-cache'
+        'LOCATION': 'taskoria-default',
+    },
+
+    'analytics': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'taskoria-analytics',
+        'TIMEOUT': 60 * 5,  # 5 minutes default
     }
 }
+
