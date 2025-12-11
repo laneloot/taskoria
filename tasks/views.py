@@ -15,7 +15,11 @@ from .permissions import IsAssigneeOrManager
 #     serializer_class = TaskSerializer
 #     permission_classes = [IsAssigneeOrManager]
 
-class TaskViewSet(viewsets.ModelViewSet):
+class TaskViewSet(viewsets.ModelViewSet): 
+    """
+    List, create, update and manage tasks.
+    Provides advanced filtering, search, and ordering.
+    """
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated, IsAssigneeOrManager]
