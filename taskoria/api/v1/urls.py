@@ -23,4 +23,6 @@ urlpatterns = [    # Schema
     path("notifications/", include("notifications.urls")),
     path('comments/', include('comments.urls')),
     path('attachments/', include('attachments.urls')),
+    path('analytics/', include('analytics.urls')),
+
 ]
