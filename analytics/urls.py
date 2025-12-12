@@ -7,6 +7,9 @@ from .views import (
     TaskTrendsAPIView,
     BurndownAPIView,
     WeeklyProductivityAPIView,
+    TeamPerformanceAPIView,
+    ProjectPortfolioAPIView,
+    OrganizationDistributionAPIView,
 )
 
 urlpatterns = [
@@ -21,15 +24,6 @@ urlpatterns = [
     path('project/<int:project_id>/burndown/', BurndownAPIView.as_view()),
     path('user/weekly-productivity/', WeeklyProductivityAPIView.as_view()),
     path('user/<int:user_id>/weekly-productivity/', WeeklyProductivityAPIView.as_view()),
-]
-
-from .views import (
-    TeamPerformanceAPIView,
-    ProjectPortfolioAPIView,
-    OrganizationDistributionAPIView,
-)
-
-urlpatterns += [
     path('reports/team-performance/', TeamPerformanceAPIView.as_view()),
     path('reports/project-portfolio/', ProjectPortfolioAPIView.as_view()),
     path('reports/organization-distribution/', OrganizationDistributionAPIView.as_view()),
