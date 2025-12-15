@@ -29,14 +29,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         #     'bio': {'required': False},
         # }
 
-    def perform_create(self, serializer):
-        user = serializer.save()
-        uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
-        token = email_verification_token.make_token(user)
-
-        verify_url = f"http://localhost:3000/verify-email/{uidb64}/{token}/"
-        print("Email verification link:", verify_url)
-
     def validate(self, attrs):
         if attrs["password"] != attrs["password2"]:
             raise serializers.ValidationError(
@@ -60,6 +52,21 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
     def validate(self, attrs):
+        """
+        Allow both username and email based logins by translating the provided
+        identifier into the username SimpleJWT expects before delegating to
+        the default validator.
+        """
+        identifier = attrs.get(self.username_field)
+        if identifier and "@" in identifier:
+            try:
+                user = User.objects.get(email__iexact=identifier)
+            except User.DoesNotExist:
+                user = None
+
+            if user:
+                attrs[self.username_field] = getattr(user, self.username_field)
+
         data = super().validate(attrs)
 
         # Add extra responses here
@@ -117,3 +124,29 @@ class SetNewPasswordSerializer(serializers.Serializer):
 class EmailVerificationSerializer(serializers.Serializer):
     uidb64 = serializers.CharField()
     token = serializers.CharField()
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    avatar = serializers.ImageField(allow_null=True, required=False)
+    bio = serializers.CharField(allow_blank=True, required=False)
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "role", "avatar", "bio")
+        read_only_fields = ("role",)
+
+    def validate_email(self, value):
+        request = self.context.get("request")
+        user = getattr(request, "user", None) or self.instance
+        if value and user:
+            if User.objects.filter(email__iexact=value).exclude(pk=user.pk).exists():
+                raise serializers.ValidationError("A user with this email already exists.")
+        return value
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        avatar = data.get("avatar")
+        request = self.context.get("request")
+        if avatar and request:
+            data["avatar"] = request.build_absolute_uri(avatar)
+        return data

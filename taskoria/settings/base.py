@@ -119,7 +119,11 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # CORS
-CORS_ALLOW_ALL_ORIGINS = True  # Dev only, restrict in production
+CORS_ALLOW_ALL_ORIGINS = False
+_default_cors = ["http://localhost:3000", "http://127.0.0.1:3000"]
+_extra_cors = [origin.strip() for origin in config("CORS_ALLOWED_ORIGINS", default="").split(",") if origin.strip()]
+CORS_ALLOWED_ORIGINS = list(dict.fromkeys([*_default_cors, *_extra_cors]))
+CORS_ALLOW_CREDENTIALS = True
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -180,4 +184,3 @@ CACHES = {
         'TIMEOUT': 60 * 5,  # 5 minutes default
     }
 }
-

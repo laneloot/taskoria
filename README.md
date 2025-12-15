@@ -1,5 +1,5 @@
 # 🧩 Taskoria  
-A modern, enterprise-grade project management platform built with **Django**, **Django REST Framework**, **Channels**, **Celery**, **Redis**, and **PostgreSQL** — with AWS integration planned.
+A modern, enterprise-grade project management platform built with **Django**, **Django REST Framework**, **Channels**, **Celery**, **Redis**, and **PostgreSQL**  -  with AWS integration planned.
 
 Taskoria includes:
 
@@ -84,17 +84,17 @@ Taskoria includes:
 ---
 
 ### **Upcoming Phases**
-- **Phase 5 — API & Search**
-- **Phase 6 — Analytics & Dashboard**
-- **Phase 7 — AWS Integration**
+- **Phase 5  -  API & Search**
+- **Phase 6  -  Analytics & Dashboard**
+- **Phase 7  -  AWS Integration**
   - SES (real email sending)
   - S3 file storage
   - RDS PostgreSQL
   - EC2 / Elastic Beanstalk deployment
   - CloudWatch logs
-- **Phase 8 — Testing & CI/CD**
-- **Phase 9 — Optimization & Security**
-- **Phase 10 — Final Review & Launch**
+- **Phase 8  -  Testing & CI/CD**
+- **Phase 9  -  Optimization & Security**
+- **Phase 10  -  Final Review & Launch**
 
 ---
 

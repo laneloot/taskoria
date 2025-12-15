@@ -4,19 +4,20 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, parsers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
 from rest_framework import status
 
 from .serializers import (
-    CustomTokenObtainPairSerializer, 
-    UserRegistrationSerializer, 
-    ChangePasswordSerializer, 
-    PasswordResetRequestSerializer, 
-    SetNewPasswordSerializer, 
-    EmailVerificationSerializer
+    CustomTokenObtainPairSerializer,
+    UserRegistrationSerializer,
+    ChangePasswordSerializer,
+    PasswordResetRequestSerializer,
+    SetNewPasswordSerializer,
+    EmailVerificationSerializer,
+    UserProfileSerializer,
 )
 from .permissions import IsAdmin
 from .utils import email_verification_token
@@ -40,7 +41,8 @@ class UserRegistrationView(generics.CreateAPIView):
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = UserRegistrationSerializer
+    serializer_class = UserProfileSerializer
+    parser_classes = [parsers.JSONParser, parsers.FormParser, parsers.MultiPartParser]
 
     def get_object(self):
         return self.request.user
@@ -50,8 +52,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
-    permission_classes = [IsAdmin]
-    authentication_classes = [JWTAuthentication] 
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
     serializer_class = UserRegistrationSerializer
 
 class ChangePasswordView(generics.UpdateAPIView):
