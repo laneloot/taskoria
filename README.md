@@ -38,6 +38,7 @@ Taskoria includes:
 
 ---
 
+
 ### **Phase 3 – Core Features**
 - **Projects**
   - Create/update/delete
