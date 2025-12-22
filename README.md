@@ -17,8 +17,8 @@ Taskoria includes:
 ## 🚀 Features
 
 ### **Phase 1 – Foundations**
-- Django project structure with `base / development / production` settings  
-- Custom User model with roles: **admin, manager, member**  
+- Django project structure with `base / development / production` settings
+- Custom User model with roles: **admin, manager, member**
 - PostgreSQL integration  
 - Docker & docker-compose setup  
 - Pre-commit hooks (Black, isort, flake8)  
