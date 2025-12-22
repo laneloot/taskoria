@@ -32,7 +32,7 @@ Taskoria includes:
 - User registration, login, logout  
 - Password reset, password change  
 - Email verification (dev mode: printed in console)  
-- RBAC permissions using Django REST Framework  
+- RBAC permissions using Django REST Framework
 - API tests for all auth flows
 
 ---
