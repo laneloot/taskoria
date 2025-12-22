@@ -14,6 +14,7 @@ Taskoria includes:
 
 ---
 
+
 ## 🚀 Features
 
 ### **Phase 1 – Foundations**
@@ -36,6 +37,7 @@ Taskoria includes:
 - API tests for all auth flows
 
 ---
+
 
 ### **Phase 3 – Core Features**
 - **Projects**
